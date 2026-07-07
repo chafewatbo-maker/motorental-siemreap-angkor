@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Angkor Premium Wi-Fi & Node Diagnostics</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Inter & Playfair Display for premium luxury look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- QR Code Styling Library for premium curved elements & gradients -->
+    <script src="https://cdn.jsdelivr.net/npm/qr-code-styling@1.5.0/lib/qr-code-styling.js"></script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+        .luxury-font {
+            font-family: 'Playfair Display', serif;
+        }
+        /* Custom scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #12141c;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #d4af37;
+            border-radius: 4px;
+        }
+        
+        /* Print rules: Focus strictly on rendering a perfect printable tent card */
+        @media print {
+            body {
+                background: white !important;
+                color: black !important;
+                padding: 0 !important;
+                margin: 0 !important;
+            }
+            header, .no-print, button, form, .control-panel, .diagnostics-panel, footer {
+                display: none !important;
+            }
+            .print-container {
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: space-between !important;
+                width: 14cm !important;
+                height: 19cm !important;
+                margin: 1.5cm auto !important;
+                border: 2px dashed #b59410 !important;
+                padding: 2.5rem !important;
+                border-radius: 0.5rem !important;
+                box-shadow: none !important;
+                background: white !important;
+                color: black !important;
+                page-break-inside: avoid;
+            }
+            #card-inner-border {
+                border: 1px solid #b59410 !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-[#0b0d10] text-gray-100 min-h-screen flex flex-col antialiased selection:bg-[#d4af37] selection:text-black">
+
+    <!-- Header / Brand Banner -->
+    <header class="border-b border-[#3b301a]/30 bg-[#0f1115]/90 sticky top-0 z-50 backdrop-blur-md px-4 sm:px-8 py-4">
+        <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div class="flex items-center gap-3">
+                <div class="h-10 w-10 rounded-xl bg-gradient-to-tr from-[#b59410] to-[#f3cf44] flex items-center justify-center shadow-lg shadow-[#b59410]/20">
+                    <i class="fa-solid fa-wifi text-neutral-950 text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white flex items-center gap-2">
+                        ALP Angkor <span class="text-[#d4af37] luxury-font italic">Link</span>
+                    </h1>
+                    <p class="text-xs text-gray-400">Premium Hotel Wi-Fi & Network Diagnostics</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+                    <span class="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+                    Portal Active
+                </span>
+                <span class="text-xs text-gray-500">Node ID: Intel AX201</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 sm:p-6 lg:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8">
+
+        <!-- Left Side Column -->
+        <div class="lg:col-span-7 flex flex-col gap-8 no-print">
+            
+            <!-- Welcome Ribbon -->
+            <div class="bg-gradient-to-r from-[#211b0e] to-[#0f1115] border border-[#d4af37]/30 rounded-2xl p-5 flex items-center gap-4">
+                <div class="p-3 bg-[#d4af37]/10 rounded-xl text-[#d4af37] flex-shrink-0">
+                    <i class="fa-solid fa-hotel text-2xl"></i>
+                </div>
+                <div>
+                    <h3 class="text-sm font-semibold text-[#d4af37]">Welcome to ALP Angkor Hotel</h3>
+                    <p class="text-xs text-gray-300 mt-0.5">Customize security details, preview, and generate premium room cards for instant access.</p>
+                </div>
+            </div>
+
+            <!-- WIFI Settings Panel -->
+            <div class="bg-[#12151a] border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-[#d4af37]/5 rounded-full blur-2xl pointer-events-none"></div>
+                
+                <h2 class="text-lg font-bold text-white mb-5 flex items-center gap-2 border-b border-gray-800 pb-3">
+                    <i class="fa-solid fa-sliders text-[#d4af37]"></i>
+                    Wi-Fi Connection Settings
+                </h2>
+
+                <form id="wifi-config-form" class="space-y-5" onsubmit="event.preventDefault();">
+                    <!-- SSID -->
+                    <div>
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">SSID (Network Name)</label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500">
+                                <i class="fa-solid fa-broadcast-tower"></i>
+                            </span>
+                            <input type="text" id="ssid-input" value="ALP Angkor Hotel" 
+                                class="w-full bg-[#181d24] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white font-medium focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent transition-all">
+                        </div>
+                    </div>
+
+                    <!-- Password / Security Option Grid -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Security Protocol -->
+                        <div>
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Security Protocol</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500">
+                                    <i class="fa-solid fa-shield-halved"></i>
+                                </span>
+                                <select id="security-input" 
+                                    class="w-full bg-[#181d24] border border-gray-700 rounded-xl pl-10 pr-4 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent appearance-none cursor-pointer transition-all">
+                                    <option value="WPA" selected>WPA/WPA2/WPA3 Personal</option>
+                                    <option value="WEP">WEP Legacy</option>
+                                    <option value="nopass">None (Open Network)</option>
+                                </select>
+                                <span class="absolute inset-y-0 right-0 flex items-center pr-3.5 pointer-events-none text-gray-400">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Password -->
+                        <div id="password-wrapper">
+                            <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-2">Security Key (Password)</label>
+                            <div class="relative">
+                                <span class="absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500">
+                                    <i class="fa-solid fa-key"></i>
+                                </span>
+                                <input type="password" id="password-input" value="ALPangkor77" placeholder="Enter password"
+                                    class="w-full bg-[#181d24] border border-gray-700 rounded-xl pl-10 pr-10 py-3 text-sm text-white focus:outline-none focus:ring-2 focus:ring-[#d4af37] focus:border-transparent transition-all">
+                                <button type="button" id="toggle-password" class="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400 hover:text-white transition-colors">
+                                    <i class="fa-solid fa-eye-slash" id="pwd-icon"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Layout Options -->
+                    <div class="pt-2">
+                        <label class="block text-xs font-semibold uppercase tracking-wider text-gray-400 mb-3">Custom QR Design Theme</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                            <button type="button" data-theme="luxury-gold" class="theme-btn active border-2 border-[#d4af37] bg-[#1a1711] text-white py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all">
+                                <span class="h-2.5 w-2.5 rounded-full bg-[#d4af37]"></span> Gold Accent
+                            </button>
+                            <button type="button" data-theme="emerald" class="theme-btn border border-gray-700 bg-[#121c17] text-gray-300 py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all hover:border-emerald-500">
+                                <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span> Emerald
+                            </button>
+                            <button type="button" data-theme="sapphire" class="theme-btn border border-gray-700 bg-[#111624] text-gray-300 py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all hover:border-blue-500">
+                                <span class="h-2.5 w-2.5 rounded-full bg-blue-500"></span> Sapphire
+                            </button>
+                            <button type="button" data-theme="onyx" class="theme-btn border border-gray-700 bg-[#171717] text-gray-300 py-2 px-3 rounded-xl text-xs font-medium flex items-center justify-center gap-1.5 transition-all hover:border-gray-500">
+                                <span class="h-2.5 w-2.5 rounded-full bg-gray-400"></span> Slate Noir
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Print preferences toggles -->
+                    <div class="flex flex-wrap gap-x-6 gap-y-3 bg-[#191d24] p-4 rounded-xl border border-gray-800">
+                        <label class="relative flex items-center cursor-pointer select-none">
+                            <input type="checkbox" id="show-pwd-checkbox" checked class="sr-only peer">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#d4af37]"></div>
+                            <span class="ml-2 text-xs font-medium text-gray-300">Display password on card</span>
+                        </label>
+                        
+                        <label class="relative flex items-center cursor-pointer select-none">
+                            <input type="checkbox" id="hidden-ssid-checkbox" class="sr-only peer">
+                            <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#d4af37]"></div>
+                            <span class="ml-2 text-xs font-medium text-gray-300">Hidden SSID</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Diagnostics & Metadata Panel -->
+            <div class="bg-[#12151a] border border-gray-800 rounded-2xl p-6 shadow-xl relative overflow-hidden">
+                <h2 class="text-lg font-bold text-white mb-4 flex items-center gap-2 border-b border-gray-800 pb-3">
+                    <i class="fa-solid fa-square-poll-horizontal text-emerald-500"></i>
+                    Network Node Diagnostics (Specs)
+                </h2>
+                <p class="text-xs text-gray-400 mb-4">Real-time parameters extracted from terminal hardware diagnostics configuration.</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Diagnostic Left Column -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Security Type</span>
+                            <span class="text-xs font-semibold text-emerald-400 px-2 py-0.5 rounded bg-emerald-500/10">WPA2-Personal</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Protocol Spec</span>
+                            <span class="text-xs font-medium text-gray-200">Wi-Fi 4 (802.11n)</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Hardware Manufacturer</span>
+                            <span class="text-xs font-medium text-gray-200">Intel Corporation</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Hardware Card Description</span>
+                            <span class="text-xs font-medium text-gray-200 truncate max-w-[160px]" title="Intel(R) Wi-Fi 6 AX201 160MHz">Intel AX201 160MHz</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Driver Release Version</span>
+                            <span class="text-xs font-mono text-gray-300">23.60.1.2</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Frequency Band</span>
+                            <span class="text-xs font-semibold text-[#d4af37]">2.4 GHz</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Assigned Channel</span>
+                            <span class="text-xs font-medium text-gray-200">5</span>
+                        </div>
+                    </div>
+
+                    <!-- Diagnostic Right Column -->
+                    <div class="space-y-3">
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Link Speed (R/T)</span>
+                            <span class="text-xs font-semibold text-blue-400 font-mono">6000/39000 Kps</span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">Physical MAC</span>
+                            <span class="text-xs font-mono text-gray-200 flex items-center gap-1.5">
+                                30-05-05-09-64-F1
+                                <button onclick="copyToClipboard('30-05-05-09-64-F1', this)" class="text-gray-500 hover:text-white transition-colors" title="Copy MAC">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">IPv4 Address</span>
+                            <span class="text-xs font-mono text-gray-200 flex items-center gap-1.5">
+                                192.168.1.9
+                                <button onclick="copyToClipboard('192.168.1.9', this)" class="text-gray-500 hover:text-white transition-colors" title="Copy IP">
+                                    <i class="fa-regular fa-copy"></i>
+                                </button>
+                            </span>
+                        </div>
+                        <div class="flex items-center justify-between p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <span class="text-xs text-gray-400">IPv6 Local</span>
+                            <span class="text-xs font-mono text-gray-300 truncate max-w-[150px]" title="fe80::aa28:bb4f:858c:8afe%10">fe80::aa28...%10</span>
+                        </div>
+                        <div class="flex flex-col gap-1 p-2.5 rounded-lg bg-[#181d24] border border-gray-800/60">
+                            <div class="flex justify-between">
+                                <span class="text-xs text-gray-400">IPv4 DNS Servers</span>
+                                <span class="text-[10px] text-amber-500/80">Unencrypted</span>
+                            </div>
+                            <span class="text-xs font-mono text-gray-300">117.120.24.1</span>
+                            <span class="text-xs font-mono text-gray-300">117.120.24.2</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Info Banner -->
+                <div class="mt-4 p-3.5 bg-blue-500/5 rounded-xl border border-blue-500/10 flex gap-2.5 items-start">
+                    <i class="fa-solid fa-circle-info text-blue-400 mt-0.5 text-xs"></i>
+                    <p class="text-[11px] leading-relaxed text-gray-400">
+                        This administrative diagnostic suite operates over standard hardware specifications. The credentials generated are compliant with global WPA guidelines.
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Right Column: Card Preview & Print Layout Area -->
+        <div class="lg:col-span-5 flex flex-col gap-6">
+            
+            <!-- Controls block for quick card adjustments (Card Style, Title etc.) -->
+            <div class="bg-[#12151a] border border-gray-800 rounded-2xl p-4 shadow-lg no-print flex flex-col gap-3">
+                <span class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Display Theme Configurations</span>
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-[11px] text-gray-400 mb-1">Corner Border Style</label>
+                        <select id="card-border-style" class="w-full bg-[#181d24] border border-gray-700 rounded-lg p-2 text-xs text-white focus:outline-none">
+                            <option value="luxury-gold">Double Gold Borders</option>
+                            <option value="minimal">Minimal Accent</option>
+                            <option value="modern-dashed">Dashed Hospitality Frame</option>
+                            <option value="none">No Card Borders</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-[11px] text-gray-400 mb-1">Custom Instruction Label</label>
+                        <select id="card-instruction" class="w-full bg-[#181d24] border border-gray-700 rounded-lg p-2 text-xs text-white focus:outline-none">
+                            <option value="Scan to Join our Network">Scan to Join Network</option>
+                            <option value="Instant Wi-Fi Access">Instant Wi-Fi Access</option>
+                            <option value="Welcome Guests - Scan Me">Welcome Guests - Scan Me</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Print Card Preview Wrapper -->
+            <div class="flex-grow flex flex-col justify-center items-center">
+                
+                <!-- Live Display Stand Card -->
+                <div id="print-canvas-area" class="w-full max-w-[390px] bg-white text-gray-900 rounded-2xl p-6 sm:p-8 shadow-2xl relative border-4 border-[#b59410]/50 print-container flex flex-col justify-between aspect-[3/4.2] transition-all overflow-hidden duration-300">
+                    
+                    <!-- Decorative Angkor patterns or elements -->
+                    <div class="absolute inset-0 border-2 border-[#b59410]/20 m-2.5 rounded-lg pointer-events-none" id="card-inner-border"></div>
+                    <!-- Diagonal watermark corner background -->
+                    <div class="absolute -right-16 -top-16 w-36 h-36 bg-[#b59410]/10 rounded-full blur-xl pointer-events-none"></div>
+                    
+                    <!-- Card Header -->
+                    <div class="relative z-10 text-center flex flex-col items-center">
+                        <span class="text-[11px] uppercase tracking-widest font-semibold text-[#b59410]" id="card-brand-top">A N G K O R   L U X U R Y</span>
+                        
+                        <!-- Hotel Name Display -->
+                        <h2 id="card-display-ssid" class="text-2xl font-bold text-gray-900 mt-1.5 mb-1 luxury-font tracking-wide">
+                            ALP Angkor Hotel
+                        </h2>
+                        
+                        <div class="h-[1px] w-24 bg-gradient-to-r from-transparent via-[#b59410] to-transparent my-1.5" id="card-divider-line"></div>
+                        
+                        <!-- Dynamic Subtitle -->
+                        <p id="card-display-subtitle" class="text-[11px] font-medium tracking-wide uppercase text-gray-500 mb-4">
+                            Scan to Join our Network
+                        </p>
+                    </div>
+
+                    <!-- Center QR Code Display Slot -->
+                    <div class="relative z-10 flex flex-col items-center justify-center my-2">
+                        <!-- Custom styled frame around QR code -->
+                        <div class="p-3.5 bg-white rounded-xl shadow-md border border-gray-100 flex items-center justify-center transition-all hover:scale-[1.02]">
+                            <div id="qr-code-holder" class="flex items-center justify-center"></div>
+                        </div>
+                        <span class="text-[10px] text-gray-400 mt-3 flex items-center gap-1.5">
+                            <i class="fa-solid fa-camera text-[#b59410]"></i> Point camera to instantly connect
+                        </span>
+                    </div>
+
+                    <!-- Card Footer Credentials Display -->
+                    <div class="relative z-10 text-center pt-2">
+                        <div class="bg-gray-50/90 rounded-xl p-3 border border-gray-100/80 inline-block w-full">
+                            <div class="grid grid-cols-1 gap-1">
+                                <div class="text-[11px] text-gray-500 font-medium">
+                                    Network SSID: <span id="card-meta-ssid" class="font-bold text-gray-800">ALP Angkor Hotel</span>
+                                </div>
+                                
+                                <div id="card-meta-pwd-row" class="text-[11px] text-gray-500 font-medium">
+                                    Passcode: <span id="card-meta-pwd" class="font-mono font-bold text-gray-800">ALPangkor77</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Mini Brand Note -->
+                        <div class="mt-3 text-[9px] text-[#b59410] uppercase tracking-wider font-semibold" id="card-compliment-tag">
+                            Complimentary High-Speed Guest Access
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- Practical Utility Buttons for Download/Print/Share -->
+            <div class="grid grid-cols-2 gap-3 no-print">
+                <!-- Print Tent Card -->
+                <button type="button" id="print-card-btn" class="col-span-2 py-3.5 px-4 bg-gradient-to-r from-[#b59410] to-[#d4af37] text-neutral-950 font-bold rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-amber-500/10 hover:shadow-amber-500/25 transform active:scale-95 transition-all text-sm">
+                    <i class="fa-solid fa-print"></i>
+                    Print Room Stand Card
+                </button>
+                
+                <!-- Download High-Res PNG -->
+                <button type="button" id="dl-png-btn" class="py-2.5 px-3 bg-[#181d24] border border-gray-800 hover:border-gray-700 text-gray-200 hover:text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                    <i class="fa-solid fa-file-image"></i>
+                    Download PNG
+                </button>
+
+                <!-- Download Vector SVG -->
+                <button type="button" id="dl-svg-btn" class="py-2.5 px-3 bg-[#181d24] border border-gray-800 hover:border-gray-700 text-gray-200 hover:text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                    <i class="fa-solid fa-file-code"></i>
+                    Download SVG
+                </button>
+
+                <!-- Copy Connection Link -->
+                <button type="button" id="copy-details-btn" class="col-span-2 py-2.5 px-3 bg-[#181d24] border border-gray-800 hover:border-gray-700 text-gray-200 hover:text-white rounded-xl text-xs font-semibold flex items-center justify-center gap-1.5 transition-all">
+                    <i class="fa-regular fa-clone"></i>
+                    Copy Wi-Fi URI Credentials
+                </button>
+            </div>
+
+            <!-- Toast Notification -->
+            <div id="toast" class="no-print fixed bottom-5 right-5 z-50 bg-[#12151a] border border-[#d4af37]/30 text-white px-4 py-3 rounded-xl shadow-2xl flex items-center gap-2 transform translate-y-24 opacity-0 transition-all duration-300">
+                <i class="fa-solid fa-circle-check text-[#d4af37]" id="toast-icon"></i>
+                <span id="toast-text" class="text-xs font-medium">Details updated!</span>
+            </div>
+
+        </div>
+
+    </main>
+
+    <!-- Page Footer -->
+    <footer class="mt-auto border-t border-gray-800/60 bg-[#0b0d10] py-6 text-center text-xs text-gray-500 no-print">
+        <p>&copy; 2026 ALP Angkor Hotel Group. Crafted with supreme precision.</p>
+        <p class="mt-1 text-[11px] text-gray-600">Enterprise Node ID: fe80::aa28:bb4f:858c:8afe%10 • Protocol WPA2-Personal</p>
+    </footer>
+
+    <script>
+        // Store theme and color settings
+        const themes = {
+            'luxury-gold': {
+                dots: '#b59410',
+                cornersSquare: '#957805',
+                cornersDot: '#b59410',
+                cardAccent: '#b59410'
+            },
+            'emerald': {
+                dots: '#059669',
+                cornersSquare: '#047857',
+                cornersDot: '#059669',
+                cardAccent: '#059669'
+            },
+            'sapphire': {
+                dots: '#2563eb',
+                cornersSquare: '#1d4ed8',
+                cornersDot: '#2563eb',
+                cardAccent: '#2563eb'
+            },
+            'onyx': {
+                dots: '#1e293b',
+                cornersSquare: '#0f172a',
+                cornersDot: '#1e293b',
+                cardAccent: '#1e293b'
+            }
+        };
+
+        let currentTheme = 'luxury-gold';
+
+        // Initialize QR styling object reference
+        let qrCodeStylingInstance = null;
+
+        // Dom Elements
+        const ssidInput = document.getElementById('ssid-input');
+        const securityInput = document.getElementById('security-input');
+        const passwordInput = document.getElementById('password-input');
+        const passwordWrapper = document.getElementById('password-wrapper');
+        const showPwdCheckbox = document.getElementById('show-pwd-checkbox');
+        const hiddenSsidCheckbox = document.getElementById('hidden-ssid-checkbox');
+        const togglePasswordBtn = document.getElementById('toggle-password');
+        const pwdIcon = document.getElementById('pwd-icon');
+        
+        const cardDisplaySsid = document.getElementById('card-display-ssid');
+        const cardDisplaySubtitle = document.getElementById('card-display-subtitle');
+        const cardMetaSsid = document.getElementById('card-meta-ssid');
+        const cardMetaPwd = document.getElementById('card-meta-pwd');
+        const cardMetaPwdRow = document.getElementById('card-meta-pwd-row');
+        const cardInnerBorder = document.getElementById('card-inner-border');
+        
+        const cardBorderStyle = document.getElementById('card-border-style');
+        const cardInstruction = document.getElementById('card-instruction');
+
+        // Form field updates
+        function updateWifiConfig() {
+            const ssid = ssidInput.value || "ALP Angkor Hotel";
+            const security = securityInput.value;
+            const password = passwordInput.value;
+            const hidden = hiddenSsidCheckbox.checked;
+
+            // Handle security conditional elements
+            if (security === 'nopass') {
+                passwordWrapper.classList.add('opacity-40', 'pointer-events-none');
+                cardMetaPwdRow.style.display = 'none';
+            } else {
+                passwordWrapper.classList.remove('opacity-40', 'pointer-events-none');
+                if (showPwdCheckbox.checked) {
+                    cardMetaPwdRow.style.display = 'block';
+                }
+            }
+
+            // Create WIFI Connection string
+            // Scheme: WIFI:S:SSID;T:SECURITY;P:PASSWORD;H:HIDDEN;;
+            let wifiUri = `WIFI:S:${escapeWifiString(ssid)};T:${security === 'nopass' ? 'nopass' : 'WPA'};`;
+            if (security !== 'nopass') {
+                wifiUri += `P:${escapeWifiString(password)};`;
+            }
+            if (hidden) {
+                wifiUri += `H:true;`;
+            }
+            wifiUri += ';';
+
+            // Live Update Display text in card mockup
+            cardDisplaySsid.innerText = ssid;
+            cardMetaSsid.innerText = ssid;
+            cardMetaPwd.innerText = password;
+
+            // QR Code Regeneration
+            generateOrUpdateQR(wifiUri);
+        }
+
+        // Helper to escape characters in Wi-Fi parameter strings
+        function escapeWifiString(val) {
+            return val.replace(/\\/g, '\\\\')
+                      .replace(/,/g, '\\,')
+                      .replace(/;/g, '\\;')
+                      .replace(/:/g, '\\:')
+                      .replace(/"/g, '\\"');
+        }
+
+        // Handle QR Code Creation & Update using live instance
+        function generateOrUpdateQR(wifiUriString) {
+            const currentColors = themes[currentTheme];
+            
+            const qrOptions = {
+                width: 220,
+                height: 220,
+                type: "svg",
+                data: wifiUriString,
+                dotsOptions: {
+                    color: currentColors.dots,
+                    type: "rounded"
+                },
+                backgroundOptions: {
+                    color: "#ffffff",
+                },
+                cornersSquareOptions: {
+                    color: currentColors.cornersSquare,
+                    type: "extra-rounded"
+                },
+                cornersDotOptions: {
+                    color: currentColors.cornersDot,
+                    type: "dot"
+                },
+                qrOptions: {
+                    typeNumber: 0,
+                    mode: "Byte",
+                    errorCorrectionLevel: "Q"
+                }
+            };
+
+            if (!qrCodeStylingInstance) {
+                qrCodeStylingInstance = new QRCodeStyling(qrOptions);
+                qrCodeStylingInstance.append(document.getElementById("qr-code-holder"));
+            } else {
+                qrCodeStylingInstance.update(qrOptions);
+            }
+        }
+
+        // Show/hide password input
+        togglePasswordBtn.addEventListener('click', () => {
+            const isPassword = passwordInput.getAttribute('type') === 'password';
+            passwordInput.setAttribute('type', isPassword ? 'text' : 'password');
+            pwdIcon.className = isPassword ? 'fa-solid fa-eye' : 'fa-solid fa-eye-slash';
+        });
+
+        // Toggle displaying password plain-text on generated printout card
+        showPwdCheckbox.addEventListener('change', (e) => {
+            if (e.target.checked && securityInput.value !== 'nopass') {
+                cardMetaPwdRow.style.display = 'block';
+            } else {
+                cardMetaPwdRow.style.display = 'none';
+            }
+        });
+
+        // Form interactions
+        ssidInput.addEventListener('input', updateWifiConfig);
+        passwordInput.addEventListener('input', updateWifiConfig);
+        securityInput.addEventListener('change', updateWifiConfig);
+        hiddenSsidCheckbox.addEventListener('change', updateWifiConfig);
+
+        // Customize card options
+        cardBorderStyle.addEventListener('change', (e) => {
+            applyCardBorders();
+        });
+
+        function applyCardBorders() {
+            const option = cardBorderStyle.value;
+            const currentColors = themes[currentTheme];
+            const cardElement = document.getElementById('print-canvas-area');
+
+            // Reset classes
+            cardInnerBorder.className = "absolute inset-0 m-2.5 rounded-lg pointer-events-none";
+            cardElement.className = "w-full max-w-[390px] bg-white text-gray-900 rounded-2xl p-6 sm:p-8 shadow-2xl relative print-container flex flex-col justify-between aspect-[3/4.2] transition-all overflow-hidden duration-300";
+            
+            // Clean direct style modifications
+            cardElement.style.borderWidth = '';
+            cardElement.style.borderColor = '';
+            cardInnerBorder.style.borderWidth = '';
+            cardInnerBorder.style.borderColor = '';
+
+            if (option === 'luxury-gold') {
+                cardElement.style.borderWidth = '4px';
+                cardElement.style.borderColor = currentColors.cardAccent;
+                cardInnerBorder.style.borderWidth = '2px';
+                cardInnerBorder.style.borderColor = `${currentColors.cardAccent}33`; // Alpha opacity
+            } else if (option === 'minimal') {
+                cardElement.style.borderWidth = '4px';
+                cardElement.style.borderColor = '#e2e8f0';
+                cardInnerBorder.style.borderWidth = '1px';
+                cardInnerBorder.style.borderColor = '#cbd5e1';
+            } else if (option === 'modern-dashed') {
+                cardElement.style.borderWidth = '4px';
+                cardElement.style.borderColor = currentColors.cardAccent;
+                cardInnerBorder.style.borderWidth = '2px';
+                cardInnerBorder.style.borderStyle = 'dashed';
+                cardInnerBorder.style.borderColor = `${currentColors.cardAccent}88`;
+            } else if (option === 'none') {
+                cardElement.style.borderWidth = '0px';
+                cardInnerBorder.style.borderWidth = '0px';
+            }
+        }
+
+        // Update card instruction label
+        cardInstruction.addEventListener('change', (e) => {
+            cardDisplaySubtitle.innerText = e.target.value;
+        });
+
+        // Theme change handler
+        document.querySelectorAll('.theme-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const selectedBtn = e.currentTarget;
+                document.querySelectorAll('.theme-btn').forEach(b => {
+                    b.classList.remove('active', 'border-2', 'border-[#d4af37]');
+                    b.classList.add('border-gray-700');
+                });
+                selectedBtn.classList.add('active', 'border-2', 'border-[#d4af37]');
+                
+                currentTheme = selectedBtn.getAttribute('data-theme');
+                
+                // Live adjust color scheme elements
+                const colors = themes[currentTheme];
+                document.getElementById('card-brand-top').style.color = colors.cardAccent;
+                document.getElementById('card-compliment-tag').style.color = colors.cardAccent;
+                document.getElementById('card-divider-line').style.background = `linear-gradient(to right, transparent, ${colors.cardAccent}, transparent)`;
+
+                // Update border & QR styles
+                applyCardBorders();
+                updateWifiConfig();
+            });
+        });
+
+        // Clipboard handler
+        function copyToClipboard(text, element) {
+            const tempEl = document.createElement('textarea');
+            tempEl.value = text;
+            document.body.appendChild(tempEl);
+            tempEl.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempEl);
+
+            if (element) {
+                const originalHtml = element.innerHTML;
+                element.innerHTML = '<i class="fa-solid fa-check text-emerald-400"></i>';
+                setTimeout(() => {
+                    element.innerHTML = originalHtml;
+                }, 1500);
+            }
+            showToast("Copied to clipboard successfully!");
+        }
+
+        // Display beautiful alerts
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-text').innerText = text;
+            toast.classList.remove('translate-y-24', 'opacity-0');
+            setTimeout(() => {
+                toast.classList.add('translate-y-24', 'opacity-0');
+            }, 3000);
+        }
+
+        // Copy entire WIFI connection URI
+        document.getElementById('copy-details-btn').addEventListener('click', () => {
+            const ssid = ssidInput.value || "ALP Angkor Hotel";
+            const security = securityInput.value;
+            const password = passwordInput.value;
+            const hidden = hiddenSsidCheckbox.checked;
+
+            let wifiUri = `WIFI:S:${escapeWifiString(ssid)};T:${security === 'nopass' ? 'nopass' : 'WPA'};`;
+            if (security !== 'nopass') {
+                wifiUri += `P:${escapeWifiString(password)};`;
+            }
+            if (hidden) {
+                wifiUri += `H:true;`;
+            }
+            wifiUri += ';';
+            
+            copyToClipboard(wifiUri);
+        });
+
+        // Trigger native print process
+        document.getElementById('print-card-btn').addEventListener('click', () => {
+            window.print();
+        });
+
+        // QR Code Download handlers
+        document.getElementById('dl-png-btn').addEventListener('click', () => {
+            if (qrCodeStylingInstance) {
+                qrCodeStylingInstance.download({ name: `ALP_Angkor_WiFi_${currentTheme}`, extension: "png" });
+                showToast("Downloading high-resolution PNG...");
+            }
+        });
+
+        document.getElementById('dl-svg-btn').addEventListener('click', () => {
+            if (qrCodeStylingInstance) {
+                qrCodeStylingInstance.download({ name: `ALP_Angkor_WiFi_${currentTheme}`, extension: "svg" });
+                showToast("Downloading scalable vector SVG...");
+            }
+        });
+
+        // Load Defaults
+        window.onload = function() {
+            updateWifiConfig();
+            applyCardBorders();
+        }
+    </script>
+</body>
+</html>
